@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package coffefi;
+
+service CoffeFi {
+    rpc TemperatureSensor (Empty) returns (Temperature) {}
+    rpc Lamp (Switch) returns (Power) {}
+    rpc CoffeMachine (Empty) returns (Status) {}
+}
+
+// Empty (like a void)
+message Empty {}
+
+// The response message containing the temperature.
+message Temperature {
+    int32 temperature = 1;
+}
+
+// The response message containing the state of coffe machine.
+message Status {
+    string status = 1;
+}
+
+// Like a interruptor 
+message Switch {
+    bool switch = 1;
+}
+
+// The response message containing the 'on' or 'off' lamp state.
+message Power {
+    string power = 1;
+}
