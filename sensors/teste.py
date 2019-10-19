@@ -1,13 +1,16 @@
 import socket
-HOST = 'localhost'  # Endereco IP do Servidor
-PORT = 5003           # Porta que o Servidor esta
-udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-dest = (HOST, PORT)
-print ('Para sair use CTRL+X\n')
-msg = input()
+HOST = ''              # Endereco IP do Servidor
+PORT = 5010            # Porta que o Servidor esta
+tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+orig = (HOST, PORT)
+tcp.bind(orig)
+tcp.listen(1)
 while True:
-    udp.sendto (bytes(msg, 'utf-8'), dest)
-    msg, cliente = udp.recvfrom(1024)
-    print(msg, cliente)
-    msg = input()
-udp.close()
+    con, cliente = tcp.accept()
+    print ('Concetado por', cliente)
+    while True:
+        msg = con.recv(1024)
+        if not msg: break
+        print (cliente, msg)
+    print ('Finalizando conexao do cliente', cliente)
+    con.close()

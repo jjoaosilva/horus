@@ -27,7 +27,7 @@ orig = (HOST, PORT)
 udp.bind(orig)
 
 lampada = sensor_pb2.Sensor()
-lampada.nome = "Lampada"
+lampada.nome = "Cafeteira"
 lampada.status = "Desligada"
 
 while True:
