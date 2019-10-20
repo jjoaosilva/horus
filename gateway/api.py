@@ -7,6 +7,8 @@ from flask_cors import CORS
 sensors = []
 
 def descoberta():
+    global sensors
+    sensors = []
     SERVER_IP = ""
     SERVER_PORT = 5000
     multicast = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
@@ -28,6 +30,11 @@ def descoberta():
 app = Flask(__name__)
 CORS(app)
 app.config['DEBUG'] = True
+
+@app.route('/discovery', methods=['GET'])
+def discovery():
+    descoberta()
+    return jsonify({"status": True})
 
 @app.route('/all', methods=['GET'])
 def all_sensor():

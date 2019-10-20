@@ -8,9 +8,11 @@ def process(info):
         return True
 
     elif(info == bytes('/GET', 'utf-8')):
+        temperatura.status = str(random.randint(-10, 40))
         return True
 
     elif(info == bytes('/INFO', 'utf-8')):
+        temperatura.status = str(random.randint(-10, 40))
         return True
 
     else:
