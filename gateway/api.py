@@ -17,11 +17,11 @@ def descoberta():
         multicast.sendto(bytes('/INFO','utf-8'),('<broadcast>', 5000+i))
         try:    
             msg_rx, client = multicast.recvfrom(1024)
+            sensorLerDados = sensor_pb2.Sensor()
+            sensorLerDados.ParseFromString(msg_rx)
+            sensors.append({'name': sensorLerDados.nome, 'ip': client[0], 'port': client[1]})
         except:
             print('')
-        sensorLerDados = sensor_pb2.Sensor()
-        sensorLerDados.ParseFromString(msg_rx)
-        sensors.append({'name': sensorLerDados.nome, 'ip': client[0], 'port': client[1]})
     print(sensors)
     multicast.close()
 
