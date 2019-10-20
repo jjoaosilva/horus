@@ -36,7 +36,7 @@ while True:
     if(msg == bytes("DES", 'utf-8')):
         break
 
-    if(process(msg)):
+    if(process(msg) == True):
         udp.sendto (cafeteira.SerializeToString(), cliente)
     else:
         udp.sendto (bytes('False', 'utf-8'), cliente)

@@ -4,9 +4,27 @@ import socket
 from flask import jsonify, request
 from flask_cors import CORS
 
-sensors = [
-            {'name': 'Temperatura', 'ip': 'localhost', 'port': 5002},
-]
+sensors = []
+
+def descoberta():
+    SERVER_IP = ""
+    SERVER_PORT = 5000
+    multicast = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    multicast.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    multicast.bind((SERVER_IP, SERVER_PORT))
+    multicast.settimeout(2)
+    for i in range(1, 4):
+        multicast.sendto(bytes('/INFO','utf-8'),('<broadcast>', 5000+i))
+        try:    
+            msg_rx, client = multicast.recvfrom(1024)
+        except:
+            print('')
+        sensorLerDados = sensor_pb2.Sensor()
+        sensorLerDados.ParseFromString(msg_rx)
+        sensors.append({'name': sensorLerDados.nome, 'ip': client[0], 'port': client[1]})
+    print(sensors)
+    multicast.close()
+
 app = Flask(__name__)
 CORS(app)
 app.config['DEBUG'] = True
@@ -68,4 +86,5 @@ def sensor_set():
     return jsonify({'name': response.nome, 'status': response.status})
 
 if (__name__ == '__main__'):
+    descoberta()
     app.run(host='localhost', port=5000)
